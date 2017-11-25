@@ -5,7 +5,7 @@
 void add_source(int N, float *value, float *value_prev, float dt)
 {
     int count;
-    int size=(N+2)*(N+2)*(N+2);
+    int size=(N+2)*(N+2)*(N+2);  //分辨率
 
     for(count=0; count<size; count++)
     {
@@ -13,8 +13,10 @@ void add_source(int N, float *value, float *value_prev, float dt)
     }
 }
 
+//边界条件  N可能是分辨率
 void boundary_condition(int N, float *value, int flag)
 {
+    // a b控制两层循环
     int count_a;
     int count_b;
 
@@ -23,7 +25,7 @@ void boundary_condition(int N, float *value, int flag)
         for(count_b=1; count_b<=N; count_b++)
         {
             if(flag == 1)
-            {
+            {//IX(i,j,k) ((i)+(N+2)*(j) + (N+2)*(N+2)*(k))
                 value[IX(0 ,count_a, count_b)]=-value[IX(1, count_a, count_b)];
                 value[IX(N+1,count_a, count_b)]=-value[IX(N, count_a, count_b)];
             }
@@ -127,7 +129,7 @@ void advect(int N, int b, float *density, float *density_prev, float *velocity_u
     float u0;
 
     float dh;
-   
+
     dh=dt*N;
 
     for(count_x=1; count_x<=N; count_x++)
@@ -144,17 +146,17 @@ void advect(int N, int b, float *density, float *density_prev, float *velocity_u
                 {
                     x=0.5;
                 }
-               
+
                 if(x > N+0.5)
                 {
                     x=(float)(N+0.5);
                 }
-               
+
                 if(y < 0.5)
                 {
                     y=0.5;
                 }
-               
+
                 if(y > N+0.5)
                 {
                     y=(float)(N+0.5);
@@ -164,7 +166,7 @@ void advect(int N, int b, float *density, float *density_prev, float *velocity_u
                 {
                     z=0.5;
                 }
-               
+
                 if(z>N+0.5)
                 {
                     z=(float)(N+0.5);
@@ -189,7 +191,7 @@ void advect(int N, int b, float *density, float *density_prev, float *velocity_u
             }
         }
     }
-   
+
     boundary_condition(N, density, b);
 }
 
@@ -210,7 +212,7 @@ void project(int N, float *velocity_u, float *velocity_v, float *velocity_w, flo
             }
         }
     }
-   
+
     boundary_condition(N, div, 0);
     boundary_condition(N, p, 0);
 
@@ -228,7 +230,7 @@ void project(int N, float *velocity_u, float *velocity_v, float *velocity_w, flo
             }
         }
     }
-       
+
     boundary_condition(N, velocity_u, 1);
     boundary_condition(N, velocity_v, 2);
     boundary_condition(N, velocity_w, 3);
@@ -237,10 +239,10 @@ void project(int N, float *velocity_u, float *velocity_v, float *velocity_w, flo
 void get_density(int N, float *density, float *density_prev, float *velocity_u, float *velocity_v, float *velocity_w, float diff, float dt)
 {
     add_source(N, density, density_prev, dt);
-   
+
     SWAP(density_prev, density);
     diffuse(N, 0, density, density_prev, diff, dt);
-   
+
     SWAP(density_prev, density);
     advect(N, 0, density, density_prev, velocity_u, velocity_v, velocity_w, dt);
 }

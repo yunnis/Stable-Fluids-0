@@ -1,24 +1,26 @@
 #include "main3D.h"
 
+// 初始化函数
 void init()
 {
-    xRot=30;
-    yRot=-40;
+    xRot=30;           //可能默认旋转数度处置
+    yRot=-40;          //可能默认旋转数度处置
 
-    xTrans=0;
-    yTrans=0;
-    zTrans=-1.0;
+    xTrans=0;          //
+    yTrans=0;          // 默认位移
+    zTrans=-1.0;       //
 
-    N=32;
-    dt=0.1f;
+    N=32;              //分辨率
+    dt=0.1f;           //可能时间步长
     diff=0.0f;
     visc=0.0f;
     force=90.0f;
     source=800.0f;
 
     int count;
-    int size=(N+2)*(N+2)*(N+2);
+    int size=(N+2)*(N+2)*(N+2);      //分辨率
 
+    //分配空间
     velocity_u=(float *)malloc(size*sizeof(float));
     velocity_v=(float *)malloc(size*sizeof(float));
     velocity_w=(float *)malloc(size*sizeof(float));
@@ -30,6 +32,7 @@ void init()
     density=(float *)malloc(size*sizeof(float));
     density_prev=(float *)malloc(size*sizeof(float));
 
+    //初始化速度和密度
     for(count=0; count<size; count++)
     {
         velocity_u[count]=0;
@@ -45,14 +48,16 @@ void init()
     }
 }
 
+// 源，u v w 可能是速度的3个坐标
 void get_source(float *density, float *velocity_u, float *velocity_v, float *velocity_w)
 {
-    int count_x;
-    int count_y;
-    int count_z;
+    int count_x;  //
+    int count_y;  //xyz上的数量
+    int count_z;  //
     int count;
-    int size=(N+2)*(N+2)*(N+2);
+    int size=(N+2)*(N+2)*(N+2);  //分辨率，默认(32+2)*(32+2)*(32+2)
 
+    //将速度和密度初始化为0
     for(count=0; count<size; count++)
     {
         velocity_u[count]=0;
