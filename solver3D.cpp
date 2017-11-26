@@ -5,7 +5,7 @@
 void add_source(int N, float *value, float *value_prev, float dt)
 {
     int count;
-    int size=(N+2)*(N+2)*(N+2);  //·Ö±æÂÊ
+    int size=(N+2)*(N+2)*(N+2);  //åˆ†è¾¨ç‡
 
     for(count=0; count<size; count++)
     {
@@ -13,10 +13,10 @@ void add_source(int N, float *value, float *value_prev, float dt)
     }
 }
 
-//±ß½çÌõ¼ş  N¿ÉÄÜÊÇ·Ö±æÂÊ
+//è¾¹ç•Œæ¡ä»¶  Nå¯èƒ½æ˜¯åˆ†è¾¨ç‡
 void boundary_condition(int N, float *value, int flag)
 {
-    // a b¿ØÖÆÁ½²ãÑ­»·
+    // a bæ§åˆ¶ä¸¤å±‚å¾ªç¯
     int count_a;
     int count_b;
 
@@ -26,34 +26,46 @@ void boundary_condition(int N, float *value, int flag)
         {
             if(flag == 1)
             {//IX(i,j,k) ((i)+(N+2)*(j) + (N+2)*(N+2)*(k))
-                value[IX(0 ,count_a, count_b)]=-value[IX(1, count_a, count_b)];
+                // value[x] = -value[x+1]
+                value[IX(0 ,count_a, count_b)]=-value[IX(1, count_a, count_b)];  //0 + (N+2)*a + (N+2)*(N+2)*b  a[1,32] b[1,32]
+                // value[x+1] = -value[x]
                 value[IX(N+1,count_a, count_b)]=-value[IX(N, count_a, count_b)];
             }
             else
             {
+                // value[x] = value[x+1]
                 value[IX(0 ,count_a, count_b)]=value[IX(1, count_a, count_b)];
+                // value[x+1] = value[x]
                 value[IX(N+1,count_a, count_b)]=value[IX(N, count_a, count_b)];
             }
 
             if(flag == 2)
             {
-                value[IX(count_a, 0, count_b)]=-value[IX(count_a, 1, count_b)];
-                value[IX(count_a, N+1, count_b)]=-value[IX(count_a, N, count_b)];
+                // value[x] = -value[x+N+2]
+                value[IX(count_a, 0, count_b)]=-value[IX(count_a, 1, count_b)]; //a + (N+2)*0 + (N+2)*(N+2)*b = a + (N+2)*1 + (N+2)*(N+2)*b
+                // value[x+N+2] = -value[x]
+                value[IX(count_a, N+1, count_b)]=-value[IX(count_a, N, count_b)];//a + (N+2)*(N+1) + (N+2)*(N+2)*b = a + (N+2)*N + (N+2)*(N+2)*b
             }
             else
             {
+                // value[x] = value[x+N+2]
                 value[IX(count_a, 0, count_b)]=value[IX(count_a, 1, count_b)];
+                // value[x+N+2] = value[x]
                 value[IX(count_a, N+1, count_b)]=value[IX(count_a, N, count_b)];
             }
 
             if(flag == 3)
             {
-                value[IX(count_a, count_b, 0)]=-value[IX(count_a, count_b, 1)];
+                //value[x] = -value[x+(N+2)*(N+2)]
+                value[IX(count_a, count_b, 0)]=-value[IX(count_a, count_b, 1)]; // a + (N+2)*b + 0 = a + (N+2)*b + (N+2)*(N+2)*1
+                //value[x+(N+2)*(N+2)] = -value[x]
                 value[IX(count_a, count_b, N+1)]=-value[IX(count_a, count_b, N)];
             }
             else
             {
+                //value[x] = value[x+(N+2)*(N+2)]
                 value[IX(count_a, count_b, 0)]=value[IX(count_a, count_b, 1)];
+                //value[x+(N+2)*(N+2)] = value[x]
                 value[IX(count_a, count_b, N+1)]=value[IX(count_a, count_b, N)];
             }
         }
