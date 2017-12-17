@@ -191,10 +191,11 @@ void draw_density()
     float d011;
     float d101;
     float d111;
-    //此处1.3f 应该是立方体边长
+    //此处1.3f 应该是立方体边长，边长/网格大小=将边长分成网格大小的段长度
     h=1.3f/N;
     //绘制矩形
     glBegin(GL_QUADS);
+    //3重从0开始的xyz循环将整个空间绘制一遍
         for(count_x=0; count_x<=N; count_x++)
         {
             pos_x=(count_x-0.5f)*h;
@@ -285,7 +286,8 @@ void draw_density()
 
                     glColor4f(d011, d011, d011, alpha);
                     glVertex3f(pos_x, pos_y+h, pos_z+h);
-
+                    //共24组代码，每组2行：一行颜色信息，一行顶点信息
+                    //GL_QUADS 4个顶点一组 输出一个四边形
                     glColor4f(d111, d111, d111, alpha);
                     glVertex3f(pos_x+h, pos_y+h, pos_z+h);
                 }
