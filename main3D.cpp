@@ -1,26 +1,26 @@
 #include "main3D.h"
 
-// ³õÊ¼»¯º¯Êı
+// åˆå§‹åŒ–å‡½æ•°
 void init()
 {
-    xRot=30;           //¿ÉÄÜÄ¬ÈÏĞı×ªÊı¶È´¦ÖÃ
-    yRot=-40;          //¿ÉÄÜÄ¬ÈÏĞı×ªÊı¶È´¦ÖÃ
+    xRot=30;           //å¯èƒ½é»˜è®¤æ—‹è½¬æ•°åº¦å¤„ç½®
+    yRot=-40;          //å¯èƒ½é»˜è®¤æ—‹è½¬æ•°åº¦å¤„ç½®
 
     xTrans=0;          //
-    yTrans=0;          // Ä¬ÈÏÎ»ÒÆ
+    yTrans=0;          // é»˜è®¤ä½ç§»
     zTrans=-1.0;       //
 
-    N=32;              //·Ö±æÂÊ
-    dt=0.1f;           //¿ÉÄÜÊ±¼ä²½³¤
+    N=32;              //åˆ†è¾¨ç‡
+    dt=0.1f;           //å¯èƒ½æ—¶é—´æ­¥é•¿
     diff=0.0f;
     visc=0.0f;
     force=90.0f;
     source=800.0f;
 
     int count;
-    int size=(N+2)*(N+2)*(N+2);      //·Ö±æÂÊ
+    int size=(N+2)*(N+2)*(N+2);      //åˆ†è¾¨ç‡
 
-    //·ÖÅä¿Õ¼ä
+    //åˆ†é…ç©ºé—´
     velocity_u=(float *)malloc(size*sizeof(float));
     velocity_v=(float *)malloc(size*sizeof(float));
     velocity_w=(float *)malloc(size*sizeof(float));
@@ -32,7 +32,7 @@ void init()
     density=(float *)malloc(size*sizeof(float));
     density_prev=(float *)malloc(size*sizeof(float));
 
-    //³õÊ¼»¯ËÙ¶ÈºÍÃÜ¶È
+    //åˆå§‹åŒ–é€Ÿåº¦å’Œå¯†åº¦
     for(count=0; count<size; count++)
     {
         velocity_u[count]=0;
@@ -48,16 +48,16 @@ void init()
     }
 }
 
-// Ô´£¬u v w ¿ÉÄÜÊÇËÙ¶ÈµÄ3¸ö×ø±ê
+// æºï¼Œu v w å¯èƒ½æ˜¯é€Ÿåº¦çš„3ä¸ªåæ ‡
 void get_source(float *density, float *velocity_u, float *velocity_v, float *velocity_w)
 {
     int count_x;  //
-    int count_y;  //xyzÉÏµÄÊıÁ¿
+    int count_y;  //xyzä¸Šçš„æ•°é‡
     int count_z;  //
     int count;
-    int size=(N+2)*(N+2)*(N+2);  //·Ö±æÂÊ£¬Ä¬ÈÏ(32+2)*(32+2)*(32+2)
+    int size=(N+2)*(N+2)*(N+2);  //åˆ†è¾¨ç‡ï¼Œé»˜è®¤(32+2)*(32+2)*(32+2)
 
-    //½«ËÙ¶ÈºÍÃÜ¶È³õÊ¼»¯Îª0
+    //å°†é€Ÿåº¦å’Œå¯†åº¦åˆå§‹åŒ–ä¸º0
     for(count=0; count<size; count++)
     {
         velocity_u[count]=0;
@@ -122,14 +122,17 @@ void get_source(float *density, float *velocity_u, float *velocity_v, float *vel
 
     return;
 }
-
+//ç»˜åˆ¶åŒºåŸŸï¼Œé•¿åº¦ä¸º1.3fçš„ç«‹æ–¹ä½“
 void draw_box()
 {
+    //çº¿å®½1.0f
     glLineWidth(1.0f);
-
+    //ç»˜åˆ¶çº¿æ®µ
     glBegin(GL_LINES);
+    //é¢œè‰²ä¸º1.0ï¼Œ0.0ï¼Œ0.0
         glColor3f(1.0f, 0.0f, 0.0f);
-
+        //ç»˜åˆ¶çº¿æ®µ
+        //ç¬¬ä¸€æ¡ï¼Œ2æ¡ä»£ç ç»˜åˆ¶ä¸€æ¡
         glVertex3f(0.0f, 0.0f, 0.0f);
         glVertex3f(1.3f, 0.0f, 0.0f);
 
@@ -167,7 +170,7 @@ void draw_box()
         glVertex3f(1.3f, 1.3f, 1.3f);
     glEnd();
 }
-
+//ç»˜åˆ¶å¯†åº¦
 void draw_density()
 {
     int count_x;
@@ -188,9 +191,9 @@ void draw_density()
     float d011;
     float d101;
     float d111;
-
+    //æ­¤å¤„1.3f åº”è¯¥æ˜¯ç«‹æ–¹ä½“è¾¹é•¿
     h=1.3f/N;
-
+    //ç»˜åˆ¶çŸ©å½¢
     glBegin(GL_QUADS);
         for(count_x=0; count_x<=N; count_x++)
         {
